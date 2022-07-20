@@ -1,58 +1,87 @@
-function computerSelection () {
-    let computerChoice = ["ROCK", "PAPER", "SCISSORS"];
-    return computerChoice[Math.floor(Math.random()*3)];
-}
+const buttons = document.querySelectorAll("button");
+const result = document.querySelector('.result')
+const final = document.querySelector('.finalResult')
+const roundResult = document.createElement('p');
+const playerScoreHTML = document.createElement('p');
+const computerScoreHTML = document.createElement('p');
+const finalResult = document.createElement('p');
+
+buttons.forEach(click => click.addEventListener('click', playRound));
 
 
-
-function playerSelection () {
-    let select = prompt("Enter Rock, Paper or Scissors");
-    return select.toUpperCase();
-}
-
+let playSelection = "";
+let computerChoice = "";
 let playerScore = 0;
 let computerScore = 0;
 
-function playRound (playerSelection, computerSelection) {
-    let a = playerSelection();
+function renderScore () {
+    playerScoreHTML.textContent = `Your Score: ${playerScore}`;
+    result.appendChild(playerScoreHTML);
+    computerScoreHTML.textContent = `Computer Score: ${computerScore}`;
+    result.appendChild(computerScoreHTML);
+}
+
+renderScore();
+
+function playerSelection (e) {
+    playSelection = e.target.id;
+    return playSelection;
+}
+
+function computerSelection () {
+    let computerChoices = ["ROCK", "PAPER", "SCISSORS"];
+    computerChoice = computerChoices[Math.floor(Math.random()*3)];
+    return computerChoice;
+}
+
+function playRound (e) {
+    let a = playerSelection(e);
     let b = computerSelection();
     let c;
 
         if (a == "ROCK" && b == "SCISSORS") {
             c = `You Won! ${a} beats ${b}`;
-            playerScore++;
+            ++playerScore;
         } else if (a == "PAPER" && b == "ROCK") {
             c = `You Won! ${a} beats ${b}`;
-            playerScore++;
+            ++playerScore;
         } else if (a == "SCISSORS" && b == "PAPER") {
             c = `You Won! ${a} beats ${b}`;
-            playerScore++;
+            ++playerScore;
         } else if (a == "SCISSORS" && b == "ROCK") {
             c = `You Lose! ${b} beats ${a}`;
-            computerScore++;
+            ++computerScore;
         } else if (a == "ROCK" && b == "PAPER") {
             c = `You Lose! ${b} beats ${a}`;
-            computerScore++;
+            ++computerScore;
         } else if (a == "ROCK" && b == "SCISSORS") {
             c = `You Lose! ${b} beats ${a}`;
-            computerScore++;
+            ++computerScore;
         } else {
             c = "Draw!";
         }
-        return c;
+        renderScore();
+        roundResult.textContent = `${c}`;
+        final.appendChild(roundResult);
+        if (playerScore > 5) {
+            setTimeout(function() {
+                alert("You are the winner");
+              }, 10);
+            playerScore = 0;
+            computerScore = 0;
+            c = "";
+            roundResult.textContent = `${c}`;
+            final.appendChild(roundResult);
+            renderScore();
+        } else if (computerScore > 5) {
+            setTimeout(function() {
+                alert("Computer is the winner");
+              }, 10);
+            playerScore = 0;
+            computerScore = 0;
+            c = "";
+            roundResult.textContent = `${c}`;
+            final.appendChild(roundResult);
+            renderScore();
+        }
 }
-
-
-function game () {
-    for (let i = 0; i < 5; i++) {
-        console.log(playRound (playerSelection, computerSelection));
-    }
-    if (playerScore > computerScore) {
-        console.log("You Won the Game");
-    }
-    else {
-        console.log("You Lose the Game");
-    }
-}
-
-game();
